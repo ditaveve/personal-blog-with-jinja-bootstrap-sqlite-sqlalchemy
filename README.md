@@ -1,6 +1,6 @@
 # Blog Capstone
 
-Day 57 of my [100 Days of Code](https://www.100daysofcode.com/) journey. This is the first part of the Blog Capstone project, where the goal was to get comfortable pulling data from an API and rendering it dynamically with Jinja templates in Flask.
+Day 57/59 of my [100 Days of Code](https://www.100daysofcode.com/) journey. This is the first part of the Blog Capstone project, where the goal was to get comfortable pulling data from an API and rendering it dynamically with Jinja templates in Flask.
 
 ## What it does
 
