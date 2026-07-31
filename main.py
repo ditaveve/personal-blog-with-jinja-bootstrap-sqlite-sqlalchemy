@@ -1,6 +1,8 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request
 import requests
 import os
+import smtplib
+from dotenv import load_dotenv
 
 
 app = Flask(__name__)
@@ -23,9 +25,39 @@ def get_article(num):
 def about():
     return render_template('about.html')
 
-@app.route('/contact')
+@app.route('/contact', methods=['GET', 'POST'])
 def contact():
-    return render_template('contact.html')
+    try:
+        name = request.form['name']
+        email = request.form['email']
+        phone = request.form['phone']
+        message = request.form['message']
+        MY_EMAIL = os.getenv('MY_EMAIL')
+        MY_EMAIL_PASSWORD = os.getenv('MY_EMAIL_PASSWORD')
+        final_message = (
+            f"Subject: New contact form message from {name}\n\n"
+            f"Name: {name}\nEmail: {email}\nPhone: {phone}\nMessage: {message}"
+        )
+
+        connection = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+        connection.login(user=MY_EMAIL, password=MY_EMAIL_PASSWORD)
+        connection.sendmail(from_addr=MY_EMAIL, to_addrs=MY_EMAIL, msg=final_message)
+        
+        return render_template('contact.html', ok=0)
+    except Exception:
+        return render_template('contact.html', ok=1)
+
+@app.route('/form-entry', methods=['GET', 'POST'])
+def receive_data():
+    name = request.form['name']
+    email = request.form['email']
+    phone = request.form['phone']
+    message = request.form['message']
+    print(name)
+    print(email)
+    print(phone)
+    print(message)
+    return render_template('contact')
 
 
 if __name__ == "__main__":
