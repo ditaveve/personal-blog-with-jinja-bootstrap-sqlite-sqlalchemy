@@ -1,6 +1,6 @@
 # Personal Blog with Jinja and Bootstrap
 
-Days 57/59 of my [100 Days of Code](https://www.100daysofcode.com/) journey. This is the Blog Capstone project: on Day 57 the goal was to get comfortable pulling data from an API and rendering it dynamically with Jinja templates in Flask, and on Day 59 the styling was upgraded using the Bootstrap "Clean Blog" theme.
+Days 57/59/60 of my [100 Days of Code](https://www.100daysofcode.com/) journey. This is the Blog Capstone project: on Day 57 the goal was to get comfortable pulling data from an API and rendering it dynamically with Jinja templates in Flask, on Day 59 the styling was upgraded using the Bootstrap "Clean Blog" theme and on Day 60 the "Contact Page" became active and working.
 
 ## What it does
 
