@@ -30,11 +30,17 @@
                                 Posted by
                                 <a href="#!">{{post["author"]}}</a>
                                 on {{post["date"]}}
+                                <a href="{{url_for('delete', post_id=post['id'])}}">✘</a>
                             </p>
                         </div>
                         <!-- Divider-->
                         <hr class="my-4" />
                     {% endfor %}
+                </div>
+                <div style="text-align: center;">
+                    <a href="{{url_for('new_post')}}">
+                        <button type="button" class="btn btn-primary">Create new Post</button>
+                    </a>
                 </div>
             </div>
         </div>
