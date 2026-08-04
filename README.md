@@ -1,6 +1,6 @@
 # Personal Blog with Jinja, Bootstrap & Flask-SQLAlchemy
 
-Days 57/59/60/67 of my [100 Days of Code](https://www.100daysofcode.com/) journey. This started as the Blog Capstone project: on Day 57 the goal was pulling data from an API and rendering it dynamically with Jinja, on Day 59 the styling was upgraded using the Bootstrap "Clean Blog" theme, on Day 60 the "Contact Page" became active and working, and on Day 67 it grew into a full CRUD blog — posts now live in a database instead of a remote API, and I added RESTful routes to create, edit, and delete them.
+Days 57/59/60/67 of my [100 Days of Code] journey. This started as the Blog Capstone project: on Day 57 the goal was pulling data from an API and rendering it dynamically with Jinja, on Day 59 the styling was upgraded using the Bootstrap "Clean Blog" theme, on Day 60 the "Contact Page" became active and working, and on Day 67 it grew into a full CRUD blog — posts now live in a database instead of a remote API, and I added RESTful routes to create, edit, and delete them.
 
 ## What it does
 
