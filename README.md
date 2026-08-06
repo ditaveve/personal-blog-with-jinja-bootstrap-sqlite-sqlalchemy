@@ -1,5 +1,7 @@
 # Personal Blog with Jinja, Bootstrap, SQLAlchemy & Flask-Login
 
+🔗 Live at: [https://personal-blog-with-jinja-bootstrap.onrender.com/](https://personal-blog-with-jinja-bootstrap.onrender.com/)
+
 Days 57/59/60/67/69 of my 100 Days of Code Python challenge. This started as the Blog Capstone project: on Day 57 the goal was pulling data from an API and rendering it dynamically with Jinja, on Day 59 the styling was upgraded using the Bootstrap "Clean Blog" theme, on Day 60 the "Contact Page" became active and working, on Day 67 it grew into a full CRUD blog backed by a real database, and on Day 69 it became a proper multi-user site — accounts, admin privileges, and a comment system.
 
 ## What it does
@@ -32,7 +34,7 @@ A Flask blog backed by SQLite (via Flask-SQLAlchemy). Anyone can browse posts an
 - Passwords are hashed with `pbkdf2:sha256` before ever touching the database — the raw password is never stored or logged.
 - Every form (register, login, new/edit post, comment, contact) goes through Flask-WTF, which includes CSRF token protection automatically.
 - Admin-only actions are gated at the route level (`@admin_only`), so protection doesn't rely on the frontend hiding buttons — direct requests to `/new-post`, `/edit-post/<id>`, or `/delete/<id>` are rejected with a 403 for anyone who isn't the admin.
-- `SECRET_KEY` is currently hardcoded in `main.py` — fine for local practice, but should move to an environment variable before this goes anywhere beyond a personal project.
+- `SECRET_KEY` is loaded from an environment variable (`.env`), not hardcoded in the source.
 
 ## Routes
 
