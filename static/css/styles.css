@@ -10796,3 +10796,15 @@ header.masthead .post-heading .meta a {
     font-size: 2.25rem;
   }
 }
+
+/* Flash Message Styling */
+.flash {
+  color: #ee6f57;
+  text-align: center;
+}
+
+/* CKEditor comment styling */
+label[for="content"] {
+  font-size: 1.5rem;
+  font-weight: 500;
+}

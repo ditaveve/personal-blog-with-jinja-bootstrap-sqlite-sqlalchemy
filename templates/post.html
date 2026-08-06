@@ -1,3 +1,5 @@
+{% from 'bootstrap5/form.html' import render_form %}
+
 <!DOCTYPE html>
 <html lang="en">
     {% include "header.html" %}
@@ -12,7 +14,7 @@
                             <h2 class="subheading">{{post["subtitle"]}}</h2>
                             <span class="meta">
                                 Posted by
-                                <a href="#!">{{post["author"]}}</a>
+                                <a href="#!">{{post.author.name}}</a>
                                 on {{post["date"]}}
                             </span>
                         </div>
@@ -20,12 +22,60 @@
                 </div>
             </div>
         </header>
+
         <!-- Post Content-->
-        {{ post["body"] | safe }}
-        <div style="text-align: right;">
-            <a href="{{url_for('edit_post', post_id=post['id'])}}">
-                <button type="button" class="btn btn-primary">Edit Post</button>
-            </a>
+        <div class="my-5" style="margin-left: 10%; margin-right: 10%;">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                {{ post["body"] | safe }}
+                {% if current_user.id == 1 %}
+                <div style="text-align: left;">
+                    <a href="{{url_for('edit_post', post_id=post['id'])}}">
+                        <button type="button" class="btn btn-primary">Edit Post</button>
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Comment Content-->
+        <div class="my-5" style="margin-left: 10%; margin-right: 10%;">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                {% for message in messages %}
+                    <p class="flash">{{ message }}</p>
+                {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div style="text-align: left;">
+                    <form method="post">
+                        
+                        {{ ckeditor.load() }}
+                        {{ ckeditor.config(name='content') }}
+                        {{ render_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- All Comments -->
+        <div class="my-5" style="margin-left: 10%; margin-right: 10%;">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div style="text-align: left;">
+                    <h2 style="font-weight: bold;"> Comments</h2>
+                </div>
+                {% for comment in post.comments %}
+                    <div class="my-5">
+                        <img src="{{comment.author['avatar']}}">
+                        <h4 class="subheading">{{comment['content'] | safe }}</h4>
+                        <span class="meta">
+                            Posted by
+                            <a href="#!">{{comment.author['name']}}</a>
+                            on {{comment['date']}}
+                        </span>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
         <!-- Footer-->
         {% include "footer.html" %}
