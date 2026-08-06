@@ -1,22 +1,53 @@
-# Personal Blog with Jinja, Bootstrap & Flask-SQLAlchemy
+# Personal Blog with Jinja, Bootstrap, SQLAlchemy & Flask-Login
 
-Days 57/59/60/67 of my [100 Days of Code] journey. This started as the Blog Capstone project: on Day 57 the goal was pulling data from an API and rendering it dynamically with Jinja, on Day 59 the styling was upgraded using the Bootstrap "Clean Blog" theme, on Day 60 the "Contact Page" became active and working, and on Day 67 it grew into a full CRUD blog — posts now live in a database instead of a remote API, and I added RESTful routes to create, edit, and delete them.
+Days 57/59/60/67/69 of my 100 Days of Code Python challenge. This started as the Blog Capstone project: on Day 57 the goal was pulling data from an API and rendering it dynamically with Jinja, on Day 59 the styling was upgraded using the Bootstrap "Clean Blog" theme, on Day 60 the "Contact Page" became active and working, on Day 67 it grew into a full CRUD blog backed by a real database, and on Day 69 it became a proper multi-user site — accounts, admin privileges, and a comment system.
 
 ## What it does
 
-A Flask blog backed by SQLite (via Flask-SQLAlchemy). The homepage lists all posts; clicking one opens its full page. Posts are written with a rich-text editor (CKEditor) rather than plain text, and there's a working contact form that emails you directly. No login/auth yet — anyone hitting `/new-post` can currently create a post.
+A Flask blog backed by SQLite (via Flask-SQLAlchemy). Anyone can browse posts and read them; registered users can leave comments; only the admin account can create, edit, or delete posts. Posts and comments are both written with a rich-text editor (CKEditor) rather than plain text, and there's a working contact form that emails you directly.
+
+## Features
+
+- **Public blog** — homepage lists every post; each post has its own page.
+- **Accounts** — register, log in, log out. Passwords are hashed (never stored or compared as plain text).
+- **Comments** — logged-in users can comment on any post. Each comment shows the commenter's name and a Gravatar avatar, generated from an MD5 hash of their email.
+- **Admin privileges** — only the admin account can create, edit, or delete posts. This is enforced server-side with a custom `@admin_only` decorator, not just hidden buttons in the UI — so a non-admin can't get around it by visiting the URL directly either.
+- **Contact form** — sends an email via Gmail SMTP.
+
+## Tech stack
+
+- [Flask](https://flask.palletsprojects.com/)
+- Jinja2 templating, with shared `header.html`/`footer.html` partials
+- [Bootstrap-Flask](https://bootstrap-flask.readthedocs.io/) (Bootstrap 5) for styling and form rendering
+- [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/) / SQLAlchemy 2.0 — typed `Mapped`/`mapped_column` models with real one-to-many relationships (`User` → `BlogPost`, `User` → `Comment`, `BlogPost` → `Comment`)
+- SQLite
+- [Flask-Login](https://flask-login.readthedocs.io/) — sessions, `current_user`, `@login_required`
+- [Flask-WTF](https://flask-wtf.readthedocs.io/) / [WTForms](https://wtforms.readthedocs.io/) — CSRF protection and form validation on every form
+- [Flask-CKEditor](https://flask-ckeditor.readthedocs.io/) — rich text for both posts and comments
+- Werkzeug's `generate_password_hash` / `check_password_hash` for password storage
+- Gravatar, via `hashlib.md5` of the user's email, for avatars
+
+## Security notes
+
+- Passwords are hashed with `pbkdf2:sha256` before ever touching the database — the raw password is never stored or logged.
+- Every form (register, login, new/edit post, comment, contact) goes through Flask-WTF, which includes CSRF token protection automatically.
+- Admin-only actions are gated at the route level (`@admin_only`), so protection doesn't rely on the frontend hiding buttons — direct requests to `/new-post`, `/edit-post/<id>`, or `/delete/<id>` are rejected with a 403 for anyone who isn't the admin.
+- `SECRET_KEY` is currently hardcoded in `main.py` — fine for local practice, but should move to an environment variable before this goes anywhere beyond a personal project.
 
 ## Routes
 
-| Route                      | Method(s)   | Description                                  |
-| ---------------------------- | ------------ | ----------------------------------------------- |
-| `/`                           | GET          | Homepage — lists all posts                     |
-| `/post/<int:num>`             | GET          | View a single post                             |
-| `/new-post`                   | GET, POST    | Form to create a new post                      |
-| `/edit-post/<post_id>`        | GET, POST    | Form to edit an existing post, pre-filled       |
-| `/delete/<post_id>`           | GET, DELETE  | Deletes a post                                 |
-| `/about`                      | GET          | About page                                     |
-| `/contact`                    | GET, POST    | Contact form, sends an email via Gmail SMTP     |
+| Route                      | Method(s)   | Description                                        |
+| ---------------------------- | ------------ | ----------------------------------------------------- |
+| `/`                           | GET          | Homepage — lists all posts                           |
+| `/post/<int:num>`             | GET, POST    | View a post; submit a comment (must be logged in)     |
+| `/register`                   | GET, POST    | Create an account                                     |
+| `/login`                      | GET, POST    | Log in                                                |
+| `/logout`                     | GET          | Log out (requires being logged in)                    |
+| `/new-post`                   | GET, POST    | Create a new post (admin only)                        |
+| `/edit-post/<post_id>`        | GET, POST    | Edit an existing post, pre-filled (admin only)         |
+| `/delete/<post_id>`           | GET, DELETE  | Delete a post (admin only)                            |
+| `/about`                      | GET          | About page                                            |
+| `/contact`                    | GET, POST    | Contact form, sends an email via Gmail SMTP           |
 
 ## Setup
 
